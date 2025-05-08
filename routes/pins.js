@@ -15,14 +15,13 @@ router.get('/', async (req, res) => {
 // Create a new pin
 router.post('/', async (req, res) => {
   const pin = new Pin({
-    name: req.body.name,
+    title: req.body.title,
     description: req.body.description,
-    coordinates: {
-      type: 'Point',
-      coordinates: [req.body.longitude, req.body.latitude]
-    },
-    type: req.body.type,
-    rating: req.body.rating
+    image: req.body.image,
+    coordinates: req.body.coordinates,
+    bookurl: req.body.bookurl,
+    direction: req.body.direction,
+    learnmore: req.body.learnmore
   });
 
   try {
@@ -62,16 +61,13 @@ router.patch('/:id', async (req, res) => {
       return res.status(404).json({ message: 'Pin not found' });
     }
 
-    if (req.body.name) pin.name = req.body.name;
+    if (req.body.title) pin.title = req.body.title;
     if (req.body.description) pin.description = req.body.description;
-    if (req.body.type) pin.type = req.body.type;
-    if (req.body.rating) pin.rating = req.body.rating;
-    if (req.body.longitude && req.body.latitude) {
-      pin.coordinates = {
-        type: 'Point',
-        coordinates: [req.body.longitude, req.body.latitude]
-      };
-    }
+    if (req.body.image) pin.image = req.body.image;
+    if (req.body.coordinates) pin.coordinates = req.body.coordinates;
+    if (req.body.bookurl) pin.bookurl = req.body.bookurl;
+    if (req.body.direction) pin.direction = req.body.direction;
+    if (req.body.learnmore) pin.learnmore = req.body.learnmore;
 
     const updatedPin = await pin.save();
     res.json(updatedPin);
