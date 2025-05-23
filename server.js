@@ -25,7 +25,10 @@ mongoose.connect(MONGODB_URI)
 
 // Routes
 const pinsRouter = require('./routes/pins');
+const overlayImagesRouter = require('./routes/overlayImages');
+
 app.use('/api/pins', pinsRouter);
+app.use('/api/overlay-images', overlayImagesRouter);
 
 // Basic route for testing
 app.get('/', (req, res) => {
