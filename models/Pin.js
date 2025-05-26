@@ -41,6 +41,11 @@ const pinSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
+  icon: {
+    type: String,
+    trim: true,
+    default: 'attraction'
+  },
   createdAt: {
     type: Date,
     default: Date.now

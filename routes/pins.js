@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Pin = require('../models/Pin');
+const PinIcon = require('../models/PinIcon');
 
 // Get all pins
 router.get('/', async (req, res) => {
@@ -14,6 +15,14 @@ router.get('/', async (req, res) => {
 
 // Create a new pin
 router.post('/', async (req, res) => {
+  let icon = req.body.icon;
+  if (!icon) {
+    // Get the first uploaded pin icon
+    const firstIcon = await PinIcon.findOne().sort({ createdAt: 1 });
+    if (firstIcon) {
+      icon = firstIcon.url;
+    }
+  }
   const pin = new Pin({
     title: req.body.title,
     description: req.body.description,
@@ -21,7 +30,8 @@ router.post('/', async (req, res) => {
     coordinates: req.body.coordinates,
     bookurl: req.body.bookurl,
     direction: req.body.direction,
-    learnmore: req.body.learnmore
+    learnmore: req.body.learnmore,
+    icon: icon
   });
 
   try {
@@ -68,6 +78,7 @@ router.patch('/:id', async (req, res) => {
     if (req.body.bookurl) pin.bookurl = req.body.bookurl;
     if (req.body.direction) pin.direction = req.body.direction;
     if (req.body.learnmore) pin.learnmore = req.body.learnmore;
+    if (req.body.icon) pin.icon = req.body.icon;
 
     const updatedPin = await pin.save();
     res.json(updatedPin);
